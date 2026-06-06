@@ -1,6 +1,6 @@
 from pathlib import Path
 import pandas as pd
-from main import predict
+from predict_service import predict
 
 CSV_PATH = "paciente.csv"
 IMAGES_DIR = Path("Images")

@@ -11,3 +11,5 @@ torchvision
 scikit-learn
 jupyter
 ipykernel
+fastapi 
+uvicorn

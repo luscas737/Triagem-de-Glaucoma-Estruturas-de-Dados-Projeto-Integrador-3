@@ -1,66 +1,82 @@
-import json
-import torch
-import timm
-import cv2
-import numpy as np
-from PIL import Image
-from albumentations import Compose, Normalize
-from albumentations.pytorch import ToTensorV2
+from fastapi import FastAPI
+from fastapi import HTTPException
+from pydantic import BaseModel
+from estrutura_abb import *
+from estrutura_avl import *
+from estrutura_heap import *
+from metrics import gerar_metricas
+from images import gerar_resultados
+app = FastAPI()
+BST = ArvoreBinariaBusca()
+AVL = ArvoreAVL()
+HEAP = FilaPrioridade()
+pacientes = {}
+@app.get("/health")
+def health():
+    return {"status": "ok"}
 
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+class PacienteRequest(BaseModel):
+    id: int
+    imagem: str
 
-CFG_PATH = "models/convnext_tiny.json"
-WEIGHTS_PATH = "models/convnext_tiny.pt.zip"
+@app.post("/pacientes")
+def criar_paciente(dados: PacienteRequest):
+    score = float(predict(dados.imagem)[0])
+    BST.inserir(dados.id, score)
+    AVL.inserir(dados.id, score)
+    paciente_heap = Paciente(dados.id, score)
+    HEAP.inserir(paciente_heap)
+    pacientes[dados.id] = {
+    "id": dados.id,
+    "imagem": dados.imagem,
+    "score": score
+    }
+    return {
+    "mensagem": "Paciente cadastrado",
+    "id": dados.id,
+    "score": score
+    }
 
-with open(CFG_PATH) as f:
-    cfg = json.load(f)
+@app.get("/ranking")
+def ranking():
 
-model = timm.create_model(
-    cfg["model_name"],
-    pretrained=False,
-    num_classes=11
-)
+    return [
+        {
+            "id": entrada[3].id,
+            "score": entrada[3].risco
+        }
+        for entrada in sorted(HEAP.heap)
+    ]
 
-model.head.fc = torch.nn.Sequential(
-    model.head.fc,
-    torch.nn.Sigmoid()
-)
+@app.get("/pacientes/{id}")
+def buscar_paciente(id: int):
 
-state_dict = torch.load(WEIGHTS_PATH, map_location=DEVICE)
-model.load_state_dict(state_dict, strict=False)
+    if id not in pacientes:
+        raise HTTPException(
+            status_code=404,
+            detail="Paciente não encontrado"
+        )
 
-model.to(DEVICE)
-model.eval()
+    return pacientes[id]
 
-transform = Compose([
-    Normalize(
-        mean=[0.485, 0.456, 0.406],
-        std=[0.229, 0.224, 0.225]
-    ),
-    ToTensorV2()
-])
+@app.delete("/heap")
+def remover_paciente():
 
+    paciente_removido = HEAP.remover()
 
-def predict(image_path):
-    img_size = cfg.get("IMG_SIZE", 224)
+    if paciente_removido is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Heap vazia"
+        )
+    pacientes.pop(paciente_removido.id, None)
+    return {
+        "mensagem": "Paciente removido da heap",
+        "id": paciente_removido.id,
+        "score": paciente_removido.risco
+    }
 
-    image = Image.open(image_path).convert("RGB")
-    image = np.array(image)
+@app.post("/metricas")
+def metricas():
+    return gerar_metricas()
 
-    image = cv2.resize(image, (img_size, img_size))
-
-    tensor = transform(image=image)["image"]
-    tensor = tensor.unsqueeze(0).to(DEVICE)
-
-    with torch.no_grad():
-        pred = model(tensor)
-
-    return pred.squeeze().cpu().numpy()
-
-
-if __name__ == "__main__":
-    from images import gerar_resultados
-    from metrics import executar_metricas
-
-    resultados = gerar_resultados()
-    executar_metricas(resultados)
