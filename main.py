@@ -6,6 +6,8 @@ from estrutura_avl import *
 from estrutura_heap import *
 from metrics import gerar_metricas
 from images import gerar_resultados
+from predict_service import predict
+
 app = FastAPI()
 BST = ArvoreBinariaBusca()
 AVL = ArvoreAVL()
