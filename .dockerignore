@@ -2,3 +2,5 @@ ambiente-virtual/
 __pycache__/
 .git/
 *.pyc
+Images/
+graficos/
