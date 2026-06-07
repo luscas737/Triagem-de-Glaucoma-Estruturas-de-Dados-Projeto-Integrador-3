@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title> Dashboard </title> 
+</head>
+<body>
+
+    <aside class="sidebar">
+    <div class="sidebar-topo">
+        <h2>Sistema de Triagem</h2>
+        <p>Glaucoma</p>
+    </div>
+    <nav class="sidebar-menu">
+        <a href="Dashboard.html" class="ativo">
+            Dashboard
+        </a>
+        <a href="NovaAnalise.html">
+            Nova Análise
+        </a>
+        <a href="Historico.html">
+            Histórico
+        </a>
+        <a href="ResultadoIA.html">
+            Resultado IA
+        </a>
+        <a href="FilaPrioridade.html">
+            Fila de Prioridade
+        </a>
+        <a href="Metricas.html">
+            Métricas
+        </a>
+    </nav>
+    <div class="sidebar-rodape">
+        <span>Administrador</span>
+    </div>
+    </aside>
+
+    <main class="main">
+        <header class="page-header">
+            <div>
+                <h1>Dashboard</h1>
+                <p>Visão geral do sistema de triagem.</p>
+            </div>
+        </header>
+        <section class="card-container">
+            <div class="card">
+                <h3>Exames Hoje</h3>
+                <p>12</p>
+            </div>
+            <div class="card">
+                <h3>Alto Risco</h3>
+                <p class="alta">3</p>
+            </div>
+            <div class="card">
+                <h3>Médio Risco</h3>
+                <p class="media">5</p>
+            </div>
+            <div class="card">
+                <h3>Baixo Risco</h3>
+                <p class="baixa">4</p>
+            </div>
+        </section>
+        <section class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Paciente</th>
+                        <th>Data</th>
+                        <th>Status</th>
+                        <th>Resultado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>João Silva</td>
+                        <td>07/06/2026</td>
+                        <td class="concluido">Concluído</td>
+                        <td class="alta">Alto Risco</td>
+                    </tr>
+                    <tr>
+                        <td>Maria Souza</td>
+                        <td>07/06/2026</td>
+                        <td class="analise">Em análise</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>Ana Lima</td>
+                        <td>06/06/2026</td>
+                        <td class="processando">Processando</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+</html>
