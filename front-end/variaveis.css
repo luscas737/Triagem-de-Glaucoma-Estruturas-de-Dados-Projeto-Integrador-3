@@ -1,0 +1,35 @@
+:root{
+    /* Cores. */
+    --primaria: #2563eb;
+    --primaria-hover: #1d4ed8;
+
+    --cor-fundo: #f4f6f9;
+    --cor-frente: #ffffff;
+
+    --cor-sidebar: #1f2937;
+    --cor-sidebar-hover: #374151;
+
+    --cor-texto: #111827;
+    --cor-texto-secundario: #6b7280;
+
+    --cor-cabecalho-tabela: #eef2ff;
+
+    /* Cores de Status. */
+    --sucesso: #22c55e;
+    --aviso: #f59e0b;
+    --erro: #ef4444;
+    --processando: #3b82f6;
+
+    /* Prioridades da fila. */
+    --prioridade-alta: #dc2626;
+    --prioridade-media: #f59e0b;
+    --prioridade-baixa: #22c55e;
+
+    /* Sidebar. */
+    --largura-sidebar: 250px;
+
+    /* Aparência. */    
+    --cor-borda: #d1d5db;
+    --sombra: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --arredondamento: 10px;
+}
