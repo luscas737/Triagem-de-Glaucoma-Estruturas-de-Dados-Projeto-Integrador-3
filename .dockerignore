@@ -2,5 +2,7 @@ ambiente-virtual/
 __pycache__/
 .git/
 *.pyc
-Images/
-graficos/
+Images/*
+!Images/
+paciente.csv
+metrics.py
