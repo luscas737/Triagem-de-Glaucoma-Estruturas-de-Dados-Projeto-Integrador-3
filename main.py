@@ -7,7 +7,7 @@ from estrutura_heap import *
 from metrics import gerar_metricas
 from images import gerar_resultados
 from predict_service import predict
-
+from fastapi.staticfiles import StaticFiles
 app = FastAPI()
 BST = ArvoreBinariaBusca()
 AVL = ArvoreAVL()
@@ -81,4 +81,9 @@ def remover_paciente():
 @app.post("/metricas")
 def metricas():
     return gerar_metricas()
-
+app.mount(
+    "/graficos",
+    StaticFiles(directory="graficos"),
+    name="graficos"
+)
+app.mount("/", StaticFiles(directory="front-end", html=True), name="frontend")
