@@ -4,117 +4,180 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title> Dashboard </title> 
+    <title>Dashboard</title>
 </head>
-<script>
-async function carregarDashboard() {
 
-    const resposta = await fetch("http://127.0.0.1:8000/ranking");
-    const ranking = await resposta.json();
-
-    const total = ranking.length;
-
-    const alto = ranking.filter(p => p.score >= 0.7).length;
-    const medio = ranking.filter(p => p.score >= 0.4 && p.score < 0.7).length;
-    const baixo = ranking.filter(p => p.score < 0.4).length;
-
-    document.getElementById("total").textContent = total;
-    document.getElementById("alto").textContent = alto;
-    document.getElementById("medio").textContent = medio;
-    document.getElementById("baixo").textContent = baixo;
-}
-
-carregarDashboard();
-</script>
 <body>
 
     <aside class="sidebar">
-    <div class="sidebar-topo">
-        <h2>Sistema de Triagem</h2>
-        <p>Glaucoma</p>
-    </div>
-    <nav class="sidebar-menu">
-        <a href="Dashboard.html" class="ativo">
-            Dashboard
-        </a>
-        <a href="NovaAnalise.html">
-            Nova Análise
-        </a>
-        <a href="Historico.html">
-            Histórico
-        </a>
-        <a href="ResultadoIA.html">
-            Resultado IA
-        </a>
-        <a href="FilaPrioridade.html">
-            Fila de Prioridade
-        </a>
-        <a href="Metricas.html">
-            Métricas
-        </a>
-    </nav>
-    <div class="sidebar-rodape">
-        <span>Administrador</span>
-    </div>
+        <div class="sidebar-topo">
+            <h2>Sistema de Triagem</h2>
+            <p>Glaucoma</p>
+        </div>
+
+        <nav class="sidebar-menu">
+            <a href="Dashboard.html" class="ativo">Dashboard</a>
+            <a href="NovaAnalise.html">Nova Análise</a>
+            <a href="Historico.html">Histórico</a>
+            <a href="ResultadoIA.html">Resultado IA</a>
+            <a href="FilaPrioridade.html">Fila de Prioridade</a>
+            <a href="Metricas.html">Métricas</a>
+        </nav>
+
+        <div class="sidebar-rodape">
+            <span>Administrador</span>
+        </div>
     </aside>
 
     <main class="main">
+
         <header class="page-header">
             <div>
                 <h1>Dashboard</h1>
                 <p>Visão geral do sistema de triagem.</p>
             </div>
         </header>
+
         <section class="card-container">
+
             <div class="card">
                 <h3>Exames Hoje</h3>
                 <p id="total">0</p>
             </div>
+
             <div class="card">
                 <h3>Alto Risco</h3>
                 <p id="alto" class="alta">0</p>
             </div>
+
             <div class="card">
                 <h3>Médio Risco</h3>
                 <p id="medio" class="media">0</p>
             </div>
+
             <div class="card">
                 <h3>Baixo Risco</h3>
                 <p id="baixo" class="baixa">0</p>
             </div>
+
         </section>
-        <section class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Paciente</th>
-                        <th>Data</th>
-                        <th>Status</th>
-                        <th>Resultado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>João Silva</td>
-                        <td>07/06/2026</td>
-                        <td class="concluido">Concluído</td>
-                        <td class="alta">Alto Risco</td>
-                    </tr>
-                    <tr>
-                        <td>Maria Souza</td>
-                        <td>07/06/2026</td>
-                        <td class="analise">Em análise</td>
-                        <td>-</td>
-                    </tr>
-                    <tr>
-                        <td>Ana Lima</td>
-                        <td>06/06/2026</td>
-                        <td class="processando">Processando</td>
-                        <td>-</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
+
+        <div style="margin-top:20px">
+
+            <button class="button" onclick="healthCheck()">
+                Health Check
+            </button>
+
+            <button class="button" onclick="atenderPaciente()">
+                Atender Próximo Paciente
+            </button>
+
+        </div>
+
+        <div class="card" style="margin-top:20px">
+            <h3>Resposta da API</h3>
+            <pre id="resultado">Nenhuma ação executada.</pre>
+        </div>
+
     </main>
+
+<script>
+
+async function carregarDashboard() {
+
+    try {
+
+        const resposta =
+            await fetch("http://127.0.0.1:8000/ranking");
+
+        const ranking = await resposta.json();
+
+        const total = ranking.length;
+
+        const alto =
+            ranking.filter(p => p.score >= 0.7).length;
+
+        const medio =
+            ranking.filter(
+                p => p.score >= 0.4 && p.score < 0.7
+            ).length;
+
+        const baixo =
+            ranking.filter(
+                p => p.score < 0.4
+            ).length;
+
+        document.getElementById("total").textContent =
+            total;
+
+        document.getElementById("alto").textContent =
+            alto;
+
+        document.getElementById("medio").textContent =
+            medio;
+
+        document.getElementById("baixo").textContent =
+            baixo;
+
+    } catch (erro) {
+
+        console.error(erro);
+
+    }
+}
+
+async function healthCheck() {
+
+    try {
+
+        const resposta =
+            await fetch("http://127.0.0.1:8000/health");
+
+        const dados =
+            await resposta.json();
+
+        document.getElementById("resultado").textContent =
+            JSON.stringify(dados, null, 4);
+
+    } catch (erro) {
+
+        document.getElementById("resultado").textContent =
+            "Erro ao chamar /health";
+
+    }
+}
+
+async function atenderPaciente() {
+
+    try {
+
+        const resposta =
+            await fetch(
+                "http://127.0.0.1:8000/heap",
+                {
+                    method: "DELETE"
+                }
+            );
+
+        const dados =
+            await resposta.json();
+
+        document.getElementById("resultado").textContent =
+            JSON.stringify(dados, null, 4);
+
+        carregarDashboard();
+
+    } catch (erro) {
+
+        document.getElementById("resultado").textContent =
+            "Erro ao remover paciente da heap";
+
+    }
+}
+
+window.onload = carregarDashboard;
+
+</script>
+
 </body>
 </html>

@@ -81,6 +81,10 @@ def remover_paciente():
 @app.post("/metricas")
 def metricas():
     return gerar_metricas()
+@app.get("/pacientes")
+def listar_pacientes():
+    return list(pacientes.values())
+
 app.mount(
     "/graficos",
     StaticFiles(directory="graficos"),
