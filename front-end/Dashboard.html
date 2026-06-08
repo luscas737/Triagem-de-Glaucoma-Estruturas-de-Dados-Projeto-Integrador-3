@@ -6,6 +6,26 @@
     <link rel="stylesheet" href="style.css">
     <title> Dashboard </title> 
 </head>
+<script>
+async function carregarDashboard() {
+
+    const resposta = await fetch("http://127.0.0.1:8000/ranking");
+    const ranking = await resposta.json();
+
+    const total = ranking.length;
+
+    const alto = ranking.filter(p => p.score >= 0.7).length;
+    const medio = ranking.filter(p => p.score >= 0.4 && p.score < 0.7).length;
+    const baixo = ranking.filter(p => p.score < 0.4).length;
+
+    document.getElementById("total").textContent = total;
+    document.getElementById("alto").textContent = alto;
+    document.getElementById("medio").textContent = medio;
+    document.getElementById("baixo").textContent = baixo;
+}
+
+carregarDashboard();
+</script>
 <body>
 
     <aside class="sidebar">
@@ -48,19 +68,19 @@
         <section class="card-container">
             <div class="card">
                 <h3>Exames Hoje</h3>
-                <p>12</p>
+                <p id="total">0</p>
             </div>
             <div class="card">
                 <h3>Alto Risco</h3>
-                <p class="alta">3</p>
+                <p id="alto" class="alta">0</p>
             </div>
             <div class="card">
                 <h3>Médio Risco</h3>
-                <p class="media">5</p>
+                <p id="medio" class="media">0</p>
             </div>
             <div class="card">
                 <h3>Baixo Risco</h3>
-                <p class="baixa">4</p>
+                <p id="baixo" class="baixa">0</p>
             </div>
         </section>
         <section class="table-container">

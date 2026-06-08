@@ -6,6 +6,35 @@
     <link rel="stylesheet" href="style.css">
     <title> Histórico </title> 
 </head>
+<script>
+async function carregarHistorico() {
+
+    const resposta = await fetch(
+        "http://127.0.0.1:8000/pacientes"
+    );
+
+    const dados = await resposta.json();
+
+    const tbody = document.getElementById("historico-body");
+
+    tbody.innerHTML = "";
+
+    dados.forEach(paciente => {
+
+        tbody.innerHTML += `
+        <tr>
+            <td>${paciente.id}</td>
+            <td>${new Date().toLocaleDateString()}</td>
+            <td class="concluido">Concluído</td>
+            <td>${(paciente.score * 100).toFixed(2)}%</td>
+        </tr>
+        `;
+    });
+}
+
+carregarHistorico();
+
+</script>
 <body>
 
 
@@ -16,22 +45,22 @@
         <p>Glaucoma</p>
     </div>
     <nav class="sidebar-menu">
-        <a href="dashboard.html">
+        <a href="Dashboard.html">
             Dashboard
         </a>
-        <a href="novaAnalise.html">
+        <a href="NovaAnalise.html">
             Nova Análise
         </a>
-        <a href="historico.html" class="ativo">
+        <a href="Historico.html" class="ativo">
             Histórico
         </a>
-        <a href="resultadoIA.html">
+        <a href="ResultadoIA.html">
             Resultado IA
         </a>
-        <a href="filaPrioridade.html">
+        <a href="FilaPrioridade.html">
             Fila de Prioridade
         </a>
-        <a href="metricas.html">
+        <a href="Metricas.html">
             Métricas
         </a>
     </nav>
@@ -72,19 +101,7 @@
                         <th>Resultado</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>João Silva</td>
-                        <td>07/06/2026</td>
-                        <td class="concluido">Concluído</td>
-                        <td class="alta">Alto Risco</td>
-                    </tr>
-                    <tr>
-                        <td>Maria Souza</td>
-                        <td>07/06/2026</td>
-                        <td class="concluido">Concluído</td>
-                        <td class="baixa">Baixo Risco</td>
-                    </tr>
+                <tbody id="historico-body">
                 </tbody>
             </table>
         </section>

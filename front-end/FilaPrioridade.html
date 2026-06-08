@@ -6,32 +6,60 @@
     <link rel="stylesheet" href="style.css">
     <title> Fila de Prioridade </title> 
 </head>
+<script>
+
+async function carregarFila() {
+
+    const resposta = await fetch(
+        "http://127.0.0.1:8000/ranking"
+    );
+
+    const dados = await resposta.json();
+
+    const tbody = document.getElementById("fila-body");
+
+    tbody.innerHTML = "";
+
+    dados.forEach(paciente => {
+
+        tbody.innerHTML += `
+        <tr>
+            <td>${paciente.id}</td>
+            <td>${paciente.score.toFixed(4)}</td>
+            <td>${(paciente.score * 100).toFixed(2)}%</td>
+            <td>${new Date().toLocaleDateString()}</td>
+        </tr>
+        `;
+    });
+}
+
+carregarFila();
+
+</script>
 <body>
 
-
-    
     <aside class="sidebar">
     <div class="sidebar-topo">
         <h2>Sistema de Triagem</h2>
         <p>Glaucoma</p>
     </div>
     <nav class="sidebar-menu">
-        <a href="dashboard.html">
+        <a href="Dashboard.html">
             Dashboard
         </a>
-        <a href="novaAnalise.html">
+        <a href="NovaAnalise.html">
             Nova Análise
         </a>
-        <a href="historico.html">
+        <a href="Historico.html">
             Histórico
         </a>
-        <a href="resultadoIA.html">
+        <a href="ResultadoIA.html">
             Resultado IA
         </a>
-        <a href="filaPrioridade.html" class="ativo">
+        <a href="FilaPrioridade.html" class="ativo">
             Fila de Prioridade
         </a>
-        <a href="metricas.html">
+        <a href="Metricas.html">
             Métricas
         </a>
     </nav>
@@ -65,31 +93,7 @@
                         <th>Data</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>João Silva</td>
-                        <td class="possivel-glaucoma">
-                            Possível Glaucoma
-                        </td>
-                        <td>92%</td>
-                        <td>07/06/2026</td>
-                    </tr>
-                    <tr>
-                        <td>Maria Souza</td>
-                        <td class="suspeito">
-                            Suspeito
-                        </td>
-                        <td>78%</td>
-                        <td>07/06/2026</td>
-                    </tr>
-                    <tr>
-                        <td>Ana Lima</td>
-                        <td class="normal">
-                            Normal
-                        </td>
-                        <td>95%</td>
-                        <td>07/06/2026</td>
-                    </tr>
+                <tbody id="fila-body">
                 </tbody>
             </table>
         </section>

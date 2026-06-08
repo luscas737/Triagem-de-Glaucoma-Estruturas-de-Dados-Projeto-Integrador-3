@@ -6,59 +6,174 @@
     <link rel="stylesheet" href="style.css">
     <title>Métricas</title>
 </head>
+<script>
+
+async function gerarMetricas() {
+
+    const botao = document.getElementById("btnMetricas");
+    const status = document.getElementById("status");
+
+    try {
+
+        botao.disabled = true;
+        botao.innerText = "Gerando...";
+        status.innerHTML = "⏳ Processando imagens e gerando métricas...";
+
+        const resposta = await fetch(
+            "http://127.0.0.1:8000/metricas",
+            {
+                method: "POST"
+            }
+        );
+
+        if (!resposta.ok) {
+            throw new Error("Erro HTTP: " + resposta.status);
+        }
+
+        const dados = await resposta.json();
+
+        document.getElementById("qtdPacientes").textContent =
+            dados.quantidade_pacientes;
+
+        document.getElementById("alturaBST").textContent =
+            dados.altura.bst;
+
+        document.getElementById("alturaAVL").textContent =
+            dados.altura.avl;
+
+        document.getElementById("compBST").textContent =
+            dados.comparacoes.bst;
+
+        document.getElementById("compAVL").textContent =
+            dados.comparacoes.avl;
+
+        document.getElementById("rotacoesAVL").textContent =
+            dados.rotacoes_avl;
+
+        document.getElementById("resultado").textContent =
+            JSON.stringify(dados, null, 4);
+
+        const timestamp = Date.now();
+
+        document.getElementById("grafico1").src =
+            "http://127.0.0.1:8000/graficos/grafico_1.png?" + timestamp;
+
+        document.getElementById("grafico2").src =
+            "http://127.0.0.1:8000/graficos/grafico_2.png?" + timestamp;
+
+        document.getElementById("grafico3").src =
+            "http://127.0.0.1:8000/graficos/grafico_3.png?" + timestamp;
+
+        status.innerHTML = "✅ Métricas geradas com sucesso!";
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        status.innerHTML =
+            "❌ Erro ao gerar métricas. Veja o console.";
+
+    } finally {
+
+        botao.disabled = false;
+        botao.innerText = "Gerar Métricas";
+    }
+}
+
+</script>
 <body>
+
     <aside class="sidebar">
         <div class="sidebar-topo">
             <h2>Sistema de Triagem</h2>
             <p>Glaucoma</p>
         </div>
+
         <nav class="sidebar-menu">
-            <a href="dashboard.html">Dashboard</a>
-            <a href="novaAnalise.html">Nova Análise</a>
-            <a href="historico.html">Histórico</a>
-            <a href="resultadoIA.html">Resultado IA</a>
-            <a href="filaPrioridade.html">Fila de Prioridade</a>
-            <a href="metricas.html" class="ativo">Métricas</a>
+            <a href="Dashboard.html">Dashboard</a>
+            <a href="NovaAnalise.html">Nova Análise</a>
+            <a href="Historico.html">Histórico</a>
+            <a href="ResultadoIA.html">Resultado IA</a>
+            <a href="FilaPrioridade.html">Fila de Prioridade</a>
+            <a href="Metricas.html" class="ativo">Métricas</a>
         </nav>
+
         <div class="sidebar-rodape">
             <span>Administrador</span>
         </div>
     </aside>
+
     <main class="main">
+
         <header class="page-header">
-            <div>
-                <h1>Métricas</h1>
-                <p>Indicadores de desempenho do sistema.</p>
-            </div>
+            <h1>Métricas</h1>
+            <p>Indicadores de desempenho do sistema.</p>
         </header>
+
         <section class="card-container">
+
             <div class="card">
-                <h3>Exames Processados</h3>
-                <p>1250</p>
+                <h3>Pacientes Processados</h3>
+                <p id="qtdPacientes">-</p>
             </div>
 
             <div class="card">
-                <h3>Precisão</h3>
-                <p>94,8%</p>
+                <h3>Altura BST</h3>
+                <p id="alturaBST">-</p>
             </div>
 
             <div class="card">
-                <h3>Tempo Médio</h3>
-                <p>2,3s</p>
+                <h3>Altura AVL</h3>
+                <p id="alturaAVL">-</p>
             </div>
+
         </section>
+
+        <section class="card-container">
+
+            <div class="card">
+                <h3>Comparações BST</h3>
+                <p id="compBST">-</p>
+            </div>
+
+            <div class="card">
+                <h3>Comparações AVL</h3>
+                <p id="compAVL">-</p>
+            </div>
+
+            <div class="card">
+                <h3>Rotações AVL</h3>
+                <p id="rotacoesAVL">-</p>
+            </div>
+
+        </section>
+
         <div class="grafico">
-            <h2>Distribuição dos Resultados</h2>
-            <img src="img/grafico1.jpg" alt="Gráfico 1">
+            <h2>Tempo de Remoção</h2>
+            <img id="grafico1" src="" alt="Gráfico 1">
         </div>
+
         <div class="grafico">
-            <h2>Evolução das Análises</h2>
-            <img src="img/grafico2.jpg" alt="Gráfico 2">
+            <h2>Tempo de Recuperação da Ordem</h2>
+            <img id="grafico2" src="" alt="Gráfico 2">
         </div>
+
         <div class="grafico">
-            <h2>Taxa de Detecção</h2>
-            <img src="img/grafico3.jpg" alt="Gráfico 3">
+            <h2>Tempo de Inserção</h2>
+            <img id="grafico3" src="" alt="Gráfico 3">
         </div>
+        <button id="btnMetricas" onclick="gerarMetricas()">
+            Gerar Métricas
+        </button>
+        <p id="status"></p>
+        <div id="loading" style="display:none;">
+            <h2>Gerando métricas...</h2>
+            <p>Isso pode levar alguns segundos.</p>
+        </div>
+        <h2>Resposta Completa</h2>
+
+        <pre id="resultado"></pre>
+
     </main>
 </body>
 </html>
