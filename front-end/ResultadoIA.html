@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <title>Resultado IA</title>
+    </head>
+    <body>
+        <aside class="sidebar">
+            <div class="sidebar-topo">
+                <h2>Sistema de Triagem</h2>
+                <p>Glaucoma</p>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="novaAnalise.html">Nova Análise</a>
+                <a href="historico.html">Histórico</a>
+                <a href="resultadoIA.html" class="ativo">Resultado IA</a>
+                <a href="filaPrioridade.html">Fila de Prioridade</a>
+                <a href="metricas.html">Métricas</a>
+            </nav>
+            <div class="sidebar-rodape">
+                <span>Administrador</span>
+            </div>
+        </aside>
+
+        <main class="main">
+            <header class="page-header">
+                <div>
+                    <h1>Resultado da IA</h1>
+                    <p>Resultado gerado pelo modelo de inteligência artificial.</p>
+                </div>
+            </header>
+
+            <section class="resultado-container">
+                <div class="card">
+                    <h2>Imagem Analisada</h2>
+                    <img src="img/exame.jpg" alt="Retinografia" class="resultado-imagem">
+                </div>
+
+                <div class="card">
+                    <h2>Resultado</h2>
+                    <span class="badge badge-glaucoma">Possível Glaucoma</span>
+                    <div class="resultado-info">
+                        <div>
+                            <span>Confiança</span>
+                            <strong>92%</strong>
+                        </div>
+                        <div>
+                            <span>Data</span>
+                            <strong>07/06/2026</strong>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>Observações</h2>
+                <p>
+                    O exame apresentou características compatíveis com
+                    possível glaucoma. Recomenda-se avaliação por um
+                    oftalmologista para confirmação diagnóstica.
+                </p>
+            </section>
+        </main>
+    </body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title> Histórico </title> 
+</head>
+<body>
+
+
+    
+    <aside class="sidebar">
+    <div class="sidebar-topo">
+        <h2>Sistema de Triagem</h2>
+        <p>Glaucoma</p>
+    </div>
+    <nav class="sidebar-menu">
+        <a href="dashboard.html">
+            Dashboard
+        </a>
+        <a href="novaAnalise.html">
+            Nova Análise
+        </a>
+        <a href="historico.html" class="ativo">
+            Histórico
+        </a>
+        <a href="resultadoIA.html">
+            Resultado IA
+        </a>
+        <a href="filaPrioridade.html">
+            Fila de Prioridade
+        </a>
+        <a href="metricas.html">
+            Métricas
+        </a>
+    </nav>
+    <div class="sidebar-rodape">
+        <span>Administrador</span>
+    </div>
+    </aside>
+    <main class="main">
+        <header class="page-header">
+            <div>
+                <h1>Histórico</h1>
+                <p>Consulte exames já processados.</p>
+            </div>
+        </header>
+        <div class="filtros">
+            <div class="form-group">
+                <label>Paciente</label>
+                <input type="text" placeholder="Pesquisar paciente">
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                    <select>
+                        <option>Todos</option>
+                        <option>Concluído</option>
+                        <option>Em análise</option>
+                        <option>Processando</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <section class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Paciente</th>
+                        <th>Data</th>
+                        <th>Status</th>
+                        <th>Resultado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>João Silva</td>
+                        <td>07/06/2026</td>
+                        <td class="concluido">Concluído</td>
+                        <td class="alta">Alto Risco</td>
+                    </tr>
+                    <tr>
+                        <td>Maria Souza</td>
+                        <td>07/06/2026</td>
+                        <td class="concluido">Concluído</td>
+                        <td class="baixa">Baixo Risco</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+</html>

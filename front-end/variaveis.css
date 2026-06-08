@@ -15,9 +15,9 @@
     --cor-bordas: #e5e7eb;
 
     /* Cores de Status. */
-    --sucesso: #22c55e;
-    --aviso: #f59e0b;
-    --erro: #ef4444;
+    --normal: #22c55e;
+    --suspeito: #f59e0b;
+    --possivel-glaucoma: #ef4444;
     --info: #3b82f6;
 
     /* Prioridades da fila. */

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title> Fila de Prioridade </title> 
+</head>
+<body>
+
+
+    
+    <aside class="sidebar">
+    <div class="sidebar-topo">
+        <h2>Sistema de Triagem</h2>
+        <p>Glaucoma</p>
+    </div>
+    <nav class="sidebar-menu">
+        <a href="dashboard.html">
+            Dashboard
+        </a>
+        <a href="novaAnalise.html">
+            Nova Análise
+        </a>
+        <a href="historico.html">
+            Histórico
+        </a>
+        <a href="resultadoIA.html">
+            Resultado IA
+        </a>
+        <a href="filaPrioridade.html" class="ativo">
+            Fila de Prioridade
+        </a>
+        <a href="metricas.html">
+            Métricas
+        </a>
+    </nav>
+    <div class="sidebar-rodape">
+        <span>Administrador</span>
+    </div>
+    </aside>
+    <main class="main">
+        <header class="page-header">
+            <div>
+                <h1>Fila de Prioridade</h1>
+                <p>Pacientes ordenados conforme o resultado da triagem.</p>
+            </div>
+        </header>
+        <div class="filtros">
+            <div class="form-group">
+                <label>Pesquisar Paciente</label>
+                <input
+                    type="text"
+                    placeholder="Digite o nome do paciente"
+                >
+            </div>
+        </div>
+        <section class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Paciente</th>
+                        <th>Resultado</th>
+                        <th>Confiança</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>João Silva</td>
+                        <td class="possivel-glaucoma">
+                            Possível Glaucoma
+                        </td>
+                        <td>92%</td>
+                        <td>07/06/2026</td>
+                    </tr>
+                    <tr>
+                        <td>Maria Souza</td>
+                        <td class="suspeito">
+                            Suspeito
+                        </td>
+                        <td>78%</td>
+                        <td>07/06/2026</td>
+                    </tr>
+                    <tr>
+                        <td>Ana Lima</td>
+                        <td class="normal">
+                            Normal
+                        </td>
+                        <td>95%</td>
+                        <td>07/06/2026</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+</html>
