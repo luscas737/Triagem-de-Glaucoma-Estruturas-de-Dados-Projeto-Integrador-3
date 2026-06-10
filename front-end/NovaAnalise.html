@@ -6,7 +6,6 @@
     <title>Nova Análise</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
     <aside class="sidebar">
@@ -82,93 +81,85 @@
         </button>
 
     </main>
-
     <script>
 
-        function mostrarImagem() {
+    function mostrarImagem() {
+
+        const arquivo =
+            document.getElementById("imagemArquivo").files[0];
+
+        if (!arquivo) return;
+
+        const preview =
+            document.getElementById("preview");
+
+        preview.src =
+            URL.createObjectURL(arquivo);
+
+        preview.style.display = "block";
+    }
+
+    async function analisarExame() {
+
+        try {
+
+            const id =
+                Number(
+                    document.getElementById("id").value
+                );
 
             const arquivo =
                 document.getElementById("imagemArquivo").files[0];
 
-            if (!arquivo) return;
+            if (!id) {
+                alert("Informe o ID do paciente");
+                return;
+            }
 
-            const preview =
-                document.getElementById("preview");
+            if (!arquivo) {
+                alert("Selecione uma imagem");
+                return;
+            }
 
-            preview.src =
-                URL.createObjectURL(arquivo);
+            const formData = new FormData();
 
-            preview.style.display = "block";
-        }
+            formData.append("id", id);
+            formData.append("imagem", arquivo);
 
-        async function analisarExame() {
-
-            try {
-
-                console.log("Botão clicado");
-
-                const id =
-                    Number(
-                        document.getElementById("id").value
-                    );
-
-                const arquivo =
-                    document.getElementById("imagemArquivo").files[0];
-
-                if (!id) {
-                    alert("Informe o ID do paciente");
-                    return;
-                }
-
-                if (!arquivo) {
-                    alert("Selecione uma imagem");
-                    return;
-                }
-
-                const paciente = {
-                    id: id,
-                    imagem: "Images/" + arquivo.name
-                };
-
-                console.log("Enviando:");
-                console.log(paciente);
-
-                const resposta =
-                    await fetch(
-                        "http://127.0.0.1:8000/pacientes",
-                        {
-                            method: "POST",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
-
-                            body:
-                                JSON.stringify(paciente)
-                        }
-                    );
-
-                const dados =
-                    await resposta.json();
-
-                console.log(dados);
-
-                alert(
-                    "Paciente cadastrado!\n\n" +
-                    "ID: " + dados.id +
-                    "\nScore: " + dados.score
+            const resposta =
+                await fetch(
+                    "http://127.0.0.1:8000/pacientes",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
                 );
 
-            } catch (erro) {
-
-                console.error(erro);
-
-                alert(
-                    "Erro ao comunicar com a API."
+            const dados =
+                await resposta.json();
+                console.log(dados)
+            if (!resposta.ok) {
+                throw new Error(
+                    dados.detail || "Erro ao cadastrar paciente"
                 );
             }
+
+            alert(
+                "Paciente cadastrado!\n\n" +
+                "ID: " + dados.id +
+                "\nScore: " + dados.score.toFixed(4)
+            );
+
+        } catch (erro) {
+
+            console.error(erro);
+
+            alert(
+                erro.message ||
+                "Erro ao comunicar com a API."
+            );
         }
+    }
 
     </script>
 

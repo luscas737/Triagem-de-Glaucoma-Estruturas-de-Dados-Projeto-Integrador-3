@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from fastapi import HTTPException
-from pydantic import BaseModel
 from estrutura_abb import *
 from estrutura_avl import *
 from estrutura_heap import *
@@ -8,6 +7,8 @@ from metrics import gerar_metricas
 from images import gerar_resultados
 from predict_service import predict
 from fastapi.staticfiles import StaticFiles
+from fastapi import UploadFile, File, Form
+import os
 app = FastAPI()
 BST = ArvoreBinariaBusca()
 AVL = ArvoreAVL()
@@ -17,26 +18,51 @@ pacientes = {}
 def health():
     return {"status": "ok"}
 
-class PacienteRequest(BaseModel):
-    id: int
-    imagem: str
 
 @app.post("/pacientes")
-def criar_paciente(dados: PacienteRequest):
-    score = float(predict(dados.imagem)[0])
-    BST.inserir(dados.id, score)
-    AVL.inserir(dados.id, score)
-    paciente_heap = Paciente(dados.id, score)
+async def criar_paciente(
+    id: int = Form(...),
+    imagem: UploadFile = File(...)
+):
+
+    if not imagem.content_type.startswith("image/"):
+        raise HTTPException(
+            status_code=400,
+            detail="Arquivo enviado não é uma imagem"
+        )
+
+    os.makedirs("Images", exist_ok=True)
+
+    caminho_imagem = f"Images/{imagem.filename}"
+
+    with open(caminho_imagem, "wb") as buffer:
+        buffer.write(await imagem.read())
+
+    try:
+        score = float(predict(caminho_imagem)[0])
+
+    except Exception:
+        raise HTTPException(
+            status_code=500,
+            detail="Erro ao processar imagem"
+        )
+
+    BST.inserir(id, score)
+    AVL.inserir(id, score)
+
+    paciente_heap = Paciente(id, score)
     HEAP.inserir(paciente_heap)
-    pacientes[dados.id] = {
-    "id": dados.id,
-    "imagem": dados.imagem,
-    "score": score
+
+    pacientes[id] = {
+        "id": id,
+        "imagem": caminho_imagem,
+        "score": score
     }
+
     return {
-    "mensagem": "Paciente cadastrado",
-    "id": dados.id,
-    "score": score
+        "mensagem": "Paciente cadastrado",
+        "id": id,
+        "score": score
     }
 
 @app.get("/ranking")
