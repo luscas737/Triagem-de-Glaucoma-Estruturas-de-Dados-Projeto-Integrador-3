@@ -27,7 +27,7 @@ pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
-## api fica disponivel em
+## abrir no navegador
 ```
-http://127.0.0.1:8000
+http://127.0.0.1:8000/Dashboard.html
 ```
