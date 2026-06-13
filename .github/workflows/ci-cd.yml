@@ -1,0 +1,76 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+
+  ci:
+    name: CI - Testes
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependências
+        run: |
+          pip install -r requirements.txt
+          pip install pytest httpx
+
+      - name: Executar testes
+        run: |
+          pytest --junitxml=relatorio.xml
+
+      - name: Publicar relatório
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorio-testes
+          path: relatorio.xml
+
+  build:
+    name: Build Docker
+    runs-on: ubuntu-latest
+    needs: ci
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Construir imagem Docker
+        run: |
+          docker build -t glaucoma-app:test .
+
+  cd:
+    name: Publicar Docker Hub
+    runs-on: ubuntu-latest
+    needs: build
+
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Login Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build e Push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/glaucoma-app:latest
