@@ -3,13 +3,13 @@ import requests
 BASE_URL = "http://127.0.0.1:8000"
 
 
-# 1. Health check
+# 1. Health check.
 def test_health():
     r = requests.get(f"{BASE_URL}/health")
     assert r.status_code == 200
 
 
-# 2. Criar paciente
+# 2. Criar paciente.
 def test_create_paciente():
     with open("Images/image_4.jpg", "rb") as img:
         files = {
@@ -33,7 +33,7 @@ def test_create_paciente():
     assert "score" in resposta
 
 
-# 3. Listar pacientes
+# 3. Listar pacientes.
 def test_listar():
     r = requests.get(f"{BASE_URL}/pacientes")
 
@@ -41,7 +41,7 @@ def test_listar():
     assert isinstance(r.json(), list)
 
 
-# 4. Buscar paciente 
+# 4. Buscar paciente. 
 def test_buscar_paciente():
     r = requests.get(f"{BASE_URL}/pacientes/999999")
 
@@ -56,7 +56,7 @@ def test_paciente_inexistente():
     assert r.json()["detail"] == "Paciente não encontrado"
 
 
-# 6. Remover da heap
+# 6. Remover da heap.
 def test_remover_heap():
     r = requests.delete(f"{BASE_URL}/heap")
 
