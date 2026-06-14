@@ -30,6 +30,7 @@ jobs:
 
       - name: Executar testes
         run: |
+          python -c "import main"
           pytest --junitxml=relatorio.xml
 
       - name: Publicar relatório
