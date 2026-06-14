@@ -51,10 +51,7 @@ jobs:
 
       - name: Teste de importação
         run: |
-          python -c "
-from main import app
-print('IMPORT OK')
-"
+          python -c "from main import app; print('IMPORT OK')"
 
       - name: Subir API
         run: |
