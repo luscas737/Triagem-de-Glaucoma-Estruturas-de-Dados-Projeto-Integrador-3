@@ -18,6 +18,27 @@ jobs:
       - name: Checkout do código
         uses: actions/checkout@v4
 
+      - name: Debug estrutura do projeto
+        run: |
+          echo "===== DIRETÓRIO ATUAL ====="
+          pwd
+
+          echo ""
+          echo "===== ARQUIVOS DA RAIZ ====="
+          ls -la
+
+          echo ""
+          echo "===== PYTHON ====="
+          python --version
+
+          echo ""
+          echo "===== LOCALIZANDO main.py ====="
+          find . -name "main.py"
+
+          echo ""
+          echo "===== PASTA TESTS ====="
+          ls -la tests || true
+
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
@@ -26,11 +47,20 @@ jobs:
       - name: Instalar dependências
         run: |
           pip install -r requirements.txt
-          pip install pytest httpx
+          pip install pytest httpx uvicorn
+
+      - name: Teste de importação
+        run: |
+          python -c "from main import app; print('IMPORT OK')"
+
+      - name: Subir API
+        run: |
+          uvicorn main:app --host 0.0.0.0 --port 8000 &
+          sleep 10
 
       - name: Executar testes
         run: |
-          pytest --junitxml=relatorio.xml
+          pytest -v --junitxml=relatorio.xml
 
       - name: Publicar relatório
         uses: actions/upload-artifact@v4
