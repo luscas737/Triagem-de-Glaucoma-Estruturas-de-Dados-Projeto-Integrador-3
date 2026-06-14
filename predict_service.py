@@ -12,25 +12,8 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 CFG_PATH = "models/convnext_tiny.json"
 WEIGHTS_PATH = "models/convnext_tiny.pt.zip"
 
-with open(CFG_PATH) as f:
-    cfg = json.load(f)
-
-model = timm.create_model(
-    cfg["model_name"],
-    pretrained=False,
-    num_classes=11
-)
-
-model.head.fc = torch.nn.Sequential(
-    model.head.fc,
-    torch.nn.Sigmoid()
-)
-
-state_dict = torch.load(WEIGHTS_PATH, map_location=DEVICE)
-model.load_state_dict(state_dict, strict=False)
-
-model.to(DEVICE)
-model.eval()
+cfg = None
+model = None
 
 transform = Compose([
     Normalize(
@@ -40,8 +23,46 @@ transform = Compose([
     ToTensorV2()
 ])
 
+def carregar_modelo():
+    global cfg, model
+
+    if model is not None:
+        return model
+
+    with open(CFG_PATH) as f:
+        cfg = json.load(f)
+
+    model = timm.create_model(
+        cfg["model_name"],
+        pretrained=False,
+        num_classes=11
+    )
+
+    model.head.fc = torch.nn.Sequential(
+        model.head.fc,
+        torch.nn.Sigmoid()
+    )
+
+    state_dict = torch.load(
+        WEIGHTS_PATH,
+        map_location=DEVICE
+    )
+
+    model.load_state_dict(
+        state_dict,
+        strict=False
+    )
+
+    model.to(DEVICE)
+    model.eval()
+
+    return model
+
 
 def predict(image_path):
+
+    modelo = carregar_modelo()
+
     img_size = cfg.get("IMG_SIZE", 224)
 
     image = Image.open(image_path).convert("RGB")
@@ -53,6 +74,6 @@ def predict(image_path):
     tensor = tensor.unsqueeze(0).to(DEVICE)
 
     with torch.no_grad():
-        pred = model(tensor)
+        pred = modelo(tensor)
 
     return pred.squeeze().cpu().numpy()

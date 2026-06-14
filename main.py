@@ -9,6 +9,7 @@ from predict_service import predict
 from fastapi.staticfiles import StaticFiles
 from fastapi import UploadFile, File, Form
 import os
+
 app = FastAPI()
 BST = ArvoreBinariaBusca()
 AVL = ArvoreAVL()
