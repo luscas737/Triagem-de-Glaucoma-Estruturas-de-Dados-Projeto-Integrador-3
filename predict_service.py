@@ -10,7 +10,7 @@ from albumentations.pytorch import ToTensorV2
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 CFG_PATH = "models/convnext_tiny.json"
-WEIGHTS_PATH = "models/convnext_tiny.pt.zip"
+WEIGHTS_PATH = "models/convnext_tiny.pt"
 
 with open(CFG_PATH) as f:
     cfg = json.load(f)
