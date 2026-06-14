@@ -17,6 +17,18 @@ jobs:
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependências
+        run: |
+          pip install -r requirements.txt
+          pip install pytest httpx uvicorn
 
       - name: Debug estrutura do projeto
         run: |
@@ -39,15 +51,18 @@ jobs:
           echo "===== PASTA TESTS ====="
           ls -la tests || true
 
-      - name: Configurar Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Instalar dependências
+      - name: Verificar arquivos do modelo
         run: |
-          pip install -r requirements.txt
-          pip install pytest httpx uvicorn
+          echo "===== MODELS ====="
+          ls -lah models
+
+          echo ""
+          echo "===== JSON ====="
+          head -20 models/convnext_tiny.json
+
+          echo ""
+          echo "===== TAMANHO JSON ====="
+          wc -c models/convnext_tiny.json
 
       - name: Teste de importação
         run: |
@@ -60,7 +75,12 @@ jobs:
 
       - name: Executar testes
         run: |
-          pytest -v --junitxml=relatorio.xml
+          echo "===== IMPORT MANUAL ====="
+          python -c "import main; print(main.__file__)"
+
+          echo ""
+          echo "===== PYTEST ====="
+          python -m pytest tests/test_api.py -v --junitxml=relatorio.xml
 
       - name: Publicar relatório
         uses: actions/upload-artifact@v4
