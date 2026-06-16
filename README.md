@@ -32,6 +32,33 @@ uvicorn main:app --reload
 http://127.0.0.1:8000/Dashboard.html
 
 ```
+### Pré-requisitos Para Executar a Aplicação Localmente com Docker:
+
+- Docker Desktop instalado no Windows ou Linux;
+
+Executar:
+
+## Inciar o Serviço do Docker (Linux)
+
+```bash
+sudo systemctl start docker
+```
+
+## Baixar a Imagem Docker na Máquina (Bash/Powershell/CMD)
+```bash
+docker pull jadilsonsa/glaucoma-app:latest
+```
+
+## Iniciar o Container da API
+```bash
+docker run -p 8000:8000 jadilsonsa/glaucoma-app:latest
+```
+
+## Para Acessar a API:
+```
+http://localhost:8000/Dashboard.html
+```
+
 ## Testes Automatizados
 
 Os testes automatizados foram desenvolvidos utilizando Pytest e FastAPI TestClient para validar o funcionamento dos principais endpoints da API.
