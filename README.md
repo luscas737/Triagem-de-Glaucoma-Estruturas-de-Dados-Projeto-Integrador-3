@@ -30,7 +30,33 @@ uvicorn main:app --reload
 ## abrir no navegador
 ```
 http://127.0.0.1:8000/Dashboard.html
+
 ```
+## Testes Automatizados
+
+Os testes automatizados foram desenvolvidos utilizando Pytest e FastAPI TestClient para validar o funcionamento dos principais endpoints da API.
+
+### Executar os testes
+
+Com o ambiente virtual ativado e as dependências instaladas, execute:
+
+```bash
+pytest -v
+```
+
+### Arquivo de testes
+
+```text
+tests/test_api.py
+```
+
+### Funcionalidades testadas
+
+- Health Check (`/health`)
+- Listagem de pacientes (`/pacientes`)
+- Busca de paciente inexistente (`/pacientes/{id}`)
+- Remoção da Heap (`/heap`)
+  
 
 ## Pipeline CI/CD
 
